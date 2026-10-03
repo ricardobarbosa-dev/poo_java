@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POO em Java, passo a passo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  fontFamily: { sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'], mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'] },
+  colors: { ink: '#14213D', paper: '#F4F6FA', teal: { DEFAULT: '#0B7A75', soft: '#DDF1EF' }, amber: { DEFAULT: '#F2A93B' }, code: '#0F1B2D' }
+}}}
+</script>
+<style>
+  pre { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .step { display: none; }
+  .step.active { display: block; }
+  :focus-visible { outline: 3px solid #F2A93B; outline-offset: 2px; }
+  .k { color: #F2A93B; } .c { color: #7F93AD; } .s { color: #8FD6CF; }
+</style>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+
+<header class="sticky top-0 z-10 bg-ink text-white">
+  <div class="mx-auto max-w-2xl px-4 pt-3 pb-2">
+    <div class="flex items-baseline justify-between">
+      <h1 class="text-base font-extrabold">POO em Java</h1>
+      <p id="count" class="text-sm text-white/70">Passo 1 de 9</p>
+    </div>
+    <div class="mt-2 h-1.5 w-full rounded-full bg-white/20">
+      <div id="bar" class="h-1.5 rounded-full bg-amber transition-all" style="width:11%"></div>
+    </div>
+    <nav id="chips" class="-mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-2" aria-label="Passos"></nav>
+  </div>
+</header>
+
+<main class="mx-auto max-w-2xl px-4 py-6 pb-28">
+
+<!-- 1 -->
+<section class="step" data-title="Classe e objeto">
+  <h2 class="text-2xl font-extrabold">1. Classe e objeto</h2>
+  <p class="mt-3 leading-relaxed">POO (Programação Orientada a Objetos) é organizar o código como o mundo real: em <b>coisas</b> que têm <b>características</b> e <b>ações</b>.</p>
+  <div class="mt-4 rounded-xl bg-teal-soft p-4 leading-relaxed">
+    <p><b>Classe</b> = o molde (a planta de uma casa).</p>
+    <p class="mt-1"><b>Objeto</b> = a coisa criada a partir do molde (a casa construída).</p>
+    <p class="mt-1">De uma classe você cria quantos objetos quiser.</p>
+  </div>
+<pre class="mt-4 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="c">// Classe: o molde</span>
+<span class="k">public class</span> Cachorro { }
+
+<span class="c">// Objetos: criados com "new"</span>
+Cachorro rex  = <span class="k">new</span> Cachorro();
+Cachorro mel  = <span class="k">new</span> Cachorro();</code></pre>
+  <p class="mt-3 leading-relaxed">Aqui <code class="font-mono text-sm">rex</code> e <code class="font-mono text-sm">mel</code> são dois objetos diferentes, feitos do mesmo molde.</p>
+  <p class="mt-4 rounded-lg border-l-4 border-amber bg-white p-3 text-sm"><b>Pratique:</b> pense em 3 classes do dia a dia (ex.: Carro, Aluno, Produto).</p>
+</section>
+
+<!-- 2 -->
+<section class="step" data-title="Atributos e métodos">
+  <h2 class="text-2xl font-extrabold">2. Atributos e métodos</h2>
+  <p class="mt-3 leading-relaxed">Toda classe tem dois tipos de membros:</p>
+  <ul class="mt-2 list-disc space-y-1 pl-5 leading-relaxed">
+    <li><b>Atributos</b>: o que o objeto <i>tem</i> (nome, idade). São variáveis.</li>
+    <li><b>Métodos</b>: o que o objeto <i>faz</i> (latir, andar). São funções.</li>
+  </ul>
+<pre class="mt-4 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">public class</span> Cachorro {
+    String nome;      <span class="c">// atributo</span>
+    int idade;        <span class="c">// atributo</span>
+
+    <span class="k">void</span> latir() {   <span class="c">// método</span>
+        System.out.println(nome + <span class="s">" diz: Au au!"</span>);
+    }
+}
+
+<span class="c">// Usando:</span>
+Cachorro rex = <span class="k">new</span> Cachorro();
+rex.nome = <span class="s">"Rex"</span>;
+rex.latir();   <span class="c">// Rex diz: Au au!</span></code></pre>
+  <p class="mt-3 leading-relaxed">O ponto (<code class="font-mono text-sm">.</code>) significa "do objeto": <code class="font-mono text-sm">rex.nome</code> é o nome do Rex.</p>
+  <p class="mt-4 rounded-lg border-l-4 border-amber bg-white p-3 text-sm"><b>Pratique:</b> crie a classe Carro com <code class="font-mono">modelo</code>, <code class="font-mono">velocidade</code> e o método <code class="font-mono">acelerar()</code>.</p>
+</section>
+
+<!-- 3 -->
+<section class="step" data-title="Construtor e this">
+  <h2 class="text-2xl font-extrabold">3. Construtor e this</h2>
+  <p class="mt-3 leading-relaxed">No passo anterior, o objeto nasceu vazio e preenchemos depois. O <b>construtor</b> resolve isso: é um método especial que roda no <code class="font-mono text-sm">new</code> e já deixa o objeto pronto.</p>
+  <ul class="mt-2 list-disc space-y-1 pl-5 leading-relaxed">
+    <li>Tem o <b>mesmo nome da classe</b>.</li>
+    <li><b>Não tem tipo de retorno</b> (nem void).</li>
+    <li><code class="font-mono text-sm">this</code> = "este objeto aqui".</li>
+  </ul>
+<pre class="mt-4 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">public class</span> Cachorro {
+    String nome;
+    int idade;
+
+    Cachorro(String nome, int idade) {
+        <span class="k">this</span>.nome  = nome;   <span class="c">// atributo = parâmetro</span>
+        <span class="k">this</span>.idade = idade;
+    }
+}
+
+Cachorro rex = <span class="k">new</span> Cachorro(<span class="s">"Rex"</span>, 3);</code></pre>
+  <p class="mt-3 leading-relaxed">Sem o <code class="font-mono text-sm">this</code>, <code class="font-mono text-sm">nome = nome</code> não saberia qual é o atributo e qual é o parâmetro.</p>
+  <p class="mt-4 rounded-lg border-l-4 border-amber bg-white p-3 text-sm"><b>Pratique:</b> adicione um construtor ao Carro que receba o modelo.</p>
+</section>
+
+<!-- 4 -->
+<section class="step" data-title="Encapsulamento">
+  <h2 class="text-2xl font-extrabold">4. Encapsulamento</h2>
+  <p class="mt-3 leading-relaxed">Ideia: <b>proteger os dados</b> do objeto. Ninguém de fora deve mexer direto no saldo da sua conta; só por operações controladas.</p>
+  <p class="mt-2 leading-relaxed">Como fazer: atributos <code class="font-mono text-sm">private</code> + métodos públicos (<b>getters</b> para ler, <b>setters</b> para alterar com regras).</p>
+<pre class="mt-4 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">public class</span> Conta {
+    <span class="k">private double</span> saldo;
+
+    <span class="k">public double</span> getSaldo() { <span class="k">return</span> saldo; }
+
+    <span class="k">public void</span> depositar(<span class="k">double</span> valor) {
+        <span class="k">if</span> (valor &gt; 0) {      <span class="c">// regra protegida</span>
+            saldo += valor;
+        }
+    }
+}
+
+conta.saldo = -999;      <span class="c">// ERRO: é private</span>
+conta.depositar(100);    <span class="c">// OK</span></code></pre>
+  <div class="mt-4 rounded-xl bg-teal-soft p-4 text-sm leading-relaxed">
+    <b>Modificadores de acesso:</b><br>
+    <code class="font-mono">private</code> só a própria classe · <code class="font-mono">protected</code> classe, pacote e filhas · <code class="font-mono">public</code> todo mundo · (sem nada) mesmo pacote.
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="step" data-title="Herança">
+  <h2 class="text-2xl font-extrabold">5. Herança</h2>
+  <p class="mt-3 leading-relaxed">Uma classe pode <b>herdar</b> atributos e métodos de outra, evitando código repetido. Relação "é um": Cachorro <i>é um</i> Animal.</p>
+<pre class="mt-4 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">public class</span> Animal {
+    <span class="k">protected</span> String nome;
+    Animal(String nome) { <span class="k">this</span>.nome = nome; }
+    <span class="k">void</span> comer() { System.out.println(nome + <span class="s">" come"</span>); }
+}
+
+<span class="k">public class</span> Cachorro <span class="k">extends</span> Animal {
+    Cachorro(String nome) {
+        <span class="k">super</span>(nome);   <span class="c">// chama o construtor do pai</span>
+    }
+    <span class="k">void</span> latir() { System.out.println(<span class="s">"Au!"</span>); }
+}
+
+Cachorro rex = <span class="k">new</span> Cachorro(<span class="s">"Rex"</span>);
+rex.comer();   <span class="c">// herdado de Animal</span>
+rex.latir();   <span class="c">// próprio</span></code></pre>
+  <ul class="mt-3 list-disc space-y-1 pl-5 leading-relaxed">
+    <li><code class="font-mono text-sm">extends</code> cria a herança.</li>
+    <li><code class="font-mono text-sm">super</code> acessa a classe pai.</li>
+    <li>Java só permite <b>um</b> pai por classe.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section class="step" data-title="Polimorfismo">
+  <h2 class="text-2xl font-extrabold">6. Polimorfismo</h2>
+  <p class="mt-3 leading-relaxed">"Muitas formas": o mesmo comando faz coisas diferentes dependendo do objeto. Duas faces:</p>
+  <p class="mt-3 font-semibold">a) Sobrescrita (@Override)</p>
+  <p class="leading-relaxed">O filho reescreve um método do pai.</p>
+<pre class="mt-2 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">class</span> Animal {
+    <span class="k">void</span> som() { System.out.println(<span class="s">"..."</span>); }
+}
+<span class="k">class</span> Cachorro <span class="k">extends</span> Animal {
+    <span class="k">@Override void</span> som() { System.out.println(<span class="s">"Au!"</span>); }
+}
+<span class="k">class</span> Gato <span class="k">extends</span> Animal {
+    <span class="k">@Override void</span> som() { System.out.println(<span class="s">"Miau!"</span>); }
+}
+
+Animal a = <span class="k">new</span> Cachorro();   <span class="c">// pai guarda filho</span>
+a.som();   <span class="c">// Au!  (decide em tempo de execução)</span></code></pre>
+  <p class="mt-4 font-semibold">b) Sobrecarga (overload)</p>
+  <p class="leading-relaxed">Mesmo nome, parâmetros diferentes, na mesma classe.</p>
+<pre class="mt-2 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">int</span> somar(<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> a + b; }
+<span class="k">double</span> somar(<span class="k">double</span> a, <span class="k">double</span> b) { <span class="k">return</span> a + b; }</code></pre>
+  <p class="mt-4 rounded-lg border-l-4 border-amber bg-white p-3 text-sm"><b>Pratique:</b> crie Vaca com som "Muuu" e monte um array de Animal com 3 bichos, chamando som() em cada um.</p>
+</section>
+
+<!-- 7 -->
+<section class="step" data-title="Abstração">
+  <h2 class="text-2xl font-extrabold">7. Abstração: abstract e interface</h2>
+  <p class="mt-3 leading-relaxed">Abstrair é mostrar só o essencial. Às vezes a classe pai é uma ideia genérica demais para existir sozinha (não existe "um animal qualquer").</p>
+  <p class="mt-3 font-semibold">Classe abstrata</p>
+  <p class="leading-relaxed">Não pode ser instanciada; pode ter métodos prontos e métodos sem corpo que os filhos <b>devem</b> implementar.</p>
+<pre class="mt-2 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">abstract class</span> Animal {
+    <span class="k">abstract void</span> som();            <span class="c">// sem corpo</span>
+    <span class="k">void</span> dormir() { System.out.println(<span class="s">"zzz"</span>); }
+}
+<span class="c">// new Animal();  → ERRO</span></code></pre>
+  <p class="mt-4 font-semibold">Interface</p>
+  <p class="leading-relaxed">Um contrato: "quem assina, tem que ter estes métodos". Uma classe pode implementar várias.</p>
+<pre class="mt-2 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">interface</span> Voador { <span class="k">void</span> voar(); }
+<span class="k">interface</span> Nadador { <span class="k">void</span> nadar(); }
+
+<span class="k">class</span> Pato <span class="k">extends</span> Animal <span class="k">implements</span> Voador, Nadador {
+    <span class="k">public void</span> som()   { System.out.println(<span class="s">"Quack"</span>); }
+    <span class="k">public void</span> voar()  { System.out.println(<span class="s">"voando"</span>); }
+    <span class="k">public void</span> nadar() { System.out.println(<span class="s">"nadando"</span>); }
+}</code></pre>
+  <div class="mt-4 rounded-xl bg-teal-soft p-4 text-sm leading-relaxed">
+    <b>Como escolher:</b> relação "é um" com código compartilhado → classe abstrata. Capacidade ("sabe voar") → interface.
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="step" data-title="static e final">
+  <h2 class="text-2xl font-extrabold">8. static e final</h2>
+  <p class="mt-3 font-semibold"><code class="font-mono">static</code>: pertence à classe, não ao objeto</p>
+  <p class="leading-relaxed">Existe uma só cópia, compartilhada. Dá para usar sem criar objeto.</p>
+<pre class="mt-2 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">class</span> Aluno {
+    <span class="k">static int</span> total = 0;     <span class="c">// compartilhado</span>
+    Aluno() { total++; }
+}
+<span class="k">new</span> Aluno(); <span class="k">new</span> Aluno();
+System.out.println(Aluno.total);   <span class="c">// 2</span>
+
+Math.sqrt(16);   <span class="c">// método static: sem new Math()</span></code></pre>
+  <p class="mt-4 font-semibold"><code class="font-mono">final</code>: não muda mais</p>
+  <ul class="mt-1 list-disc space-y-1 pl-5 leading-relaxed">
+    <li>Variável <code class="font-mono text-sm">final</code>: constante.</li>
+    <li>Método <code class="font-mono text-sm">final</code>: não pode ser sobrescrito.</li>
+    <li>Classe <code class="font-mono text-sm">final</code>: não pode ser herdada (ex.: String).</li>
+  </ul>
+<pre class="mt-3 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">static final double</span> PI = 3.14159;</code></pre>
+</section>
+
+<!-- 9 -->
+<section class="step" data-title="Juntando tudo">
+  <h2 class="text-2xl font-extrabold">9. Juntando tudo</h2>
+  <p class="mt-3 leading-relaxed">Um mini sistema bancário usando os 4 pilares:</p>
+<pre class="mt-3 rounded-xl bg-code p-4 text-sm leading-relaxed text-white"><code><span class="k">abstract class</span> Conta {
+    <span class="k">private double</span> saldo;           <span class="c">// encapsulamento</span>
+    <span class="k">public double</span> getSaldo() { <span class="k">return</span> saldo; }
+    <span class="k">public void</span> depositar(<span class="k">double</span> v) { <span class="k">if</span> (v &gt; 0) saldo += v; }
+    <span class="k">protected void</span> debitar(<span class="k">double</span> v) { saldo -= v; }
+    <span class="k">public abstract void</span> sacar(<span class="k">double</span> v);   <span class="c">// abstração</span>
+}
+
+<span class="k">class</span> Corrente <span class="k">extends</span> Conta {    <span class="c">// herança</span>
+    <span class="k">@Override public void</span> sacar(<span class="k">double</span> v) {  <span class="c">// polimorfismo</span>
+        <span class="k">if</span> (getSaldo() + 500 &gt;= v) debitar(v);  <span class="c">// cheque especial</span>
+    }
+}
+<span class="k">class</span> Poupanca <span class="k">extends</span> Conta {
+    <span class="k">@Override public void</span> sacar(<span class="k">double</span> v) {
+        <span class="k">if</span> (getSaldo() &gt;= v) debitar(v);
+    }
+}
+
+Conta c = <span class="k">new</span> Poupanca();
+c.depositar(200);
+c.sacar(50);</code></pre>
+
+  <h3 class="mt-6 text-lg font-extrabold">Resumo dos 4 pilares</h3>
+  <dl class="mt-2 space-y-2 text-sm leading-relaxed">
+    <div class="rounded-lg bg-white p-3"><dt class="font-bold">Encapsulamento</dt><dd>Esconder dados com private e expor só o necessário.</dd></div>
+    <div class="rounded-lg bg-white p-3"><dt class="font-bold">Herança</dt><dd>Reaproveitar código com extends.</dd></div>
+    <div class="rounded-lg bg-white p-3"><dt class="font-bold">Polimorfismo</dt><dd>Mesmo método, comportamentos diferentes por objeto.</dd></div>
+    <div class="rounded-lg bg-white p-3"><dt class="font-bold">Abstração</dt><dd>Definir o essencial com abstract e interface.</dd></div>
+  </dl>
+
+  <h3 class="mt-6 text-lg font-extrabold">Próximos estudos</h3>
+  <p class="mt-1 leading-relaxed">Composição ("tem um") vs herança, <code class="font-mono text-sm">equals/hashCode/toString</code>, exceções, coleções (<code class="font-mono text-sm">List</code>, <code class="font-mono text-sm">Map</code>) e princípios SOLID.</p>
+</section>
+
+</main>
+
+<footer class="fixed inset-x-0 bottom-0 border-t border-ink/10 bg-white">
+  <div class="mx-auto flex max-w-2xl gap-3 px-4 py-3">
+    <button id="prev" class="flex-1 rounded-lg border border-ink/20 py-3 font-semibold disabled:opacity-40">Voltar</button>
+    <button id="next" class="flex-[2] rounded-lg bg-teal py-3 font-semibold text-white">Próximo passo</button>
+  </div>
+</footer>
+
+<script>
+  const steps = [...document.querySelectorAll('.step')];
+  const chips = document.getElementById('chips');
+  const bar = document.getElementById('bar');
+  const count = document.getElementById('count');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  let i = 0;
+
+  steps.forEach((s, n) => {
+    const b = document.createElement('button');
+    b.textContent = (n + 1) + '. ' + s.dataset.title;
+    b.className = 'chip shrink-0 rounded-full px-3 py-1 text-sm';
+    b.onclick = () => go(n);
+    chips.appendChild(b);
+  });
+
+  function go(n) {
+    i = Math.max(0, Math.min(steps.length - 1, n));
+    steps.forEach((s, k) => s.classList.toggle('active', k === i));
+    [...chips.children].forEach((c, k) => {
+      c.className = 'chip shrink-0 rounded-full px-3 py-1 text-sm ' +
+        (k === i ? 'bg-amber text-ink font-semibold' : 'bg-white/10 text-white');
+      if (k === i) c.scrollIntoView({ inline: 'center', block: 'nearest' });
+    });
+    bar.style.width = ((i + 1) / steps.length * 100) + '%';
+    count.textContent = 'Passo ' + (i + 1) + ' de ' + steps.length;
+    prev.disabled = i === 0;
+    next.textContent = i === steps.length - 1 ? 'Recomeçar' : 'Próximo passo';
+    history.replaceState(null, '', '#' + (i + 1));
+    window.scrollTo(0, 0);
+  }
+
+  prev.onclick = () => go(i - 1);
+  next.onclick = () => go(i === steps.length - 1 ? 0 : i + 1);
+  go((parseInt(location.hash.slice(1)) || 1) - 1);
+</script>
+</body>
+</html>
