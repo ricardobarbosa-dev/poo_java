@@ -117,9 +117,68 @@ gabigol.marcarGol();
   <div class="q" data-ok="0"><p>Para que serve o construtor?</p><i>Preparar o objeto quando ele é criado</i><i>Apagar o objeto</i><i>Imprimir dados na tela</i><em>Ele deixa o objeto já com seus dados iniciais.</em></div>
 </section>
 
-<section class="step" data-title="2. Encapsulamento">
+<section class="step" data-title="2. Construtor, getter e setter">
+  <p class="tag">FUNDAMENTOS</p>
+  <h2 class="text-2xl font-extrabold">2. Construtor, getter e setter</h2>
+  <div class="card mt-3 text-sm leading-relaxed">
+    <p><b>O que é:</b> o <b>construtor</b> monta o objeto; o <b>getter</b> deixa ler um atributo; o <b>setter</b> deixa alterar um atributo.</p>
+    <p class="mt-1"><b>Para que serve:</b> como os atributos são <code class="i">private</code>, esses três são as portas oficiais para criar, ler e mudar os dados.</p>
+  </div>
+<pre class="java" data-f="Jogador.java">
+public class Jogador {
+    private String nome;
+    private int camisa;
+    private boolean titular;
+
+    public Jogador() {
+        this("Sem nome", 0);
+    }
+
+    public Jogador(String nome, int camisa) {
+        this.nome = nome;
+        this.camisa = camisa;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setCamisa(int camisa) {
+        this.camisa = camisa;
+    }
+
+    public boolean isTitular() {
+        return titular;
+    }
+}
+</pre>
+  <h4 class="ht">Linha a linha</h4>
+  <ul class="ex">
+    <li><b>6-8</b><span>Construtor vazio. Se você não escrever nenhum, o Java cria um vazio sozinho; no momento em que você escreve um, o automático some. <code class="i">this(...)</code> chama o outro construtor e evita repetir código.</span></li>
+    <li><b>10-13</b><span>Construtor completo. Dois construtores com o mesmo nome e parâmetros diferentes se chamam <b>sobrecarga</b>: você escolhe como criar o objeto.</span></li>
+    <li><b>15-17</b><span>Getter: devolve o valor (<code class="i">return</code>). Aqui não há setter de nome: o nome é só de leitura, ninguém troca.</span></li>
+    <li><b>19-21</b><span>Setter: recebe um valor novo e grava no atributo.</span></li>
+    <li><b>23-25</b><span>Para <code class="i">boolean</code> o costume é <code class="i">is</code> no lugar de <code class="i">get</code>.</span></li>
+  </ul>
+<pre class="java" data-f="Main.java">
+Jogador a = new Jogador();
+Jogador b = new Jogador("Pedro", 9);
+b.setCamisa(10);
+System.out.println(b.getNome());
+</pre>
+  <ul class="ex">
+    <li><b>1-2</b><span>Cada <code class="i">new</code> escolhe o construtor pelos parâmetros que você passa.</span></li>
+    <li><b>3</b><span>Muda a camisa pelo setter. <b>4</b> lê o nome pelo getter.</span></li>
+  </ul>
+  <p class="use"><b>Quando usar:</b> construtor sempre que o objeto precisa de dados para existir. Getter só se alguém de fora precisa ler. Setter só se o valor pode mudar, de preferência com validação. Não crie por hábito: no IntelliJ, <code class="i">Alt+Insert</code> gera todos quando precisar.</p>
+  <h3 class="mt-6 text-lg font-extrabold">Desafios</h3>
+  <div class="q" data-ok="1"><p>A classe não tem nenhum construtor. O que acontece?</p><i>Dá erro de compilação</i><i>O Java cria um construtor vazio automaticamente</i><i>Não dá para criar objetos dela</i><em>Mas se você escrever qualquer construtor, esse automático deixa de existir.</em></div>
+  <div class="q" data-ok="0"><p>O nome do jogador nunca deve mudar. O que fazer?</p><i>Criar só o getter, sem setter</i><i>Criar getter e setter públicos</i><i>Deixar o atributo public</i><em>Sem setter, o atributo vira somente leitura.</em></div>
+</section>
+
+<section class="step" data-title="3. Encapsulamento">
   <p class="tag">PEQUENO</p>
-  <h2 class="text-2xl font-extrabold">2. Encapsulamento</h2>
+  <h2 class="text-2xl font-extrabold">3. Encapsulamento</h2>
   <p class="mt-3 leading-relaxed">É <b>proteger os dados</b> do objeto: o atributo fica <code class="i">private</code> e só métodos controlam como ele muda. Assim o objeto nunca fica com valor inválido (camisa 500, por exemplo).</p>
 <pre class="java" data-f="Jogador.java">
 public class Jogador {
@@ -146,17 +205,203 @@ public class Jogador {
     <li><b>8</b><span>Só chega aqui se passou na regra, então grava com segurança.</span></li>
     <li><b>11-12</b><span><i>Getter</i> (de "get", pegar): deixa ler o valor sem permitir alterar.</span></li>
   </ul>
+  <div class="card mt-3 text-sm leading-relaxed">
+    <b>Quem enxerga o quê</b>
+    <ul class="mt-2 space-y-1">
+      <li><code class="i">private</code>: só a própria classe.</li>
+      <li>(sem nada): classes do mesmo pacote.</li>
+      <li><code class="i">protected</code>: mesmo pacote e classes filhas.</li>
+      <li><code class="i">public</code>: todo mundo.</li>
+    </ul>
+    <p class="mt-2"><b>Vantagens:</b> segurança (ninguém coloca dado inválido), manutenção (você muda o código por dentro sem quebrar quem usa) e regras num lugar só.</p>
+  </div>
   <p class="use"><b>Quando usar:</b> sempre. Comece todo atributo como <code class="i">private</code>. Crie getter se alguém precisa ler, e setter só se precisa mudar, com validação.</p>
 
   <h3 class="mt-6 text-lg font-extrabold">Desafios</h3>
   <div class="q" data-ok="0"><p>O que é encapsulamento?</p><i>Esconder os dados e liberar acesso só por métodos controlados</i><i>Criar classes filhas</i><i>Repetir código em vários lugares</i><em>O objeto protege seu próprio estado.</em></div>
   <div class="q" data-ok="1"><p>Por que o atributo <code class="i">camisa</code> é private?</p><i>Para o código rodar mais rápido</i><i>Para ninguém de fora colocar um valor inválido</i><i>Porque o Java obriga</i><em>Com private, toda mudança passa pela validação do setter.</em></div>
   <div class="q" data-ok="2"><p>Qual método serve só para LER a camisa?</p><i>setCamisa</i><i>throw</i><i>getCamisa</i><em>Getter lê; setter altera.</em></div>
+  <div class="q" data-ok="2"><p>Qual modificador deixa o membro visível para o pacote e para as classes filhas?</p><i>private</i><i>public</i><i>protected</i><em>private = só a classe; public = todos; protected = pacote e filhas.</em></div>
 </section>
 
-<section class="step" data-title="3. Herança">
+<section class="step" data-title="4. Métodos especiais">
+  <p class="tag">FUNDAMENTOS</p>
+  <h2 class="text-2xl font-extrabold">4. Métodos especiais</h2>
+  <div class="card mt-3 text-sm leading-relaxed">
+    <p><b>O que é:</b> métodos que o Java já conhece e chama sozinho em certas situações: <code class="i">toString</code> (texto do objeto), <code class="i">equals</code> (comparar), <code class="i">hashCode</code> (etiqueta numérica) e o <code class="i">main</code> (início do programa).</p>
+    <p class="mt-1"><b>Para que serve:</b> fazer seus objetos "falarem" a língua do Java: aparecer legíveis no console, ser comparados corretamente e funcionar em listas e conjuntos.</p>
+  </div>
+<pre class="java" data-f="Time.java">
+public class Time {
+    private String nome;
+
+    public Time(String nome) {
+        this.nome = nome;
+    }
+
+    @Override
+    public String toString() {
+        return "Time: " + nome;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Time)) return false;
+        Time outro = (Time) o;
+        return nome.equals(outro.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return nome.hashCode();
+    }
+}
+</pre>
+  <h4 class="ht">Linha a linha</h4>
+  <ul class="ex">
+    <li><b>8-11</b><span><code class="i">toString</code>: sem ele, imprimir o objeto mostra algo feio como <code class="i">Time@1b6d3586</code>. Com ele, aparece <code class="i">Time: Flamengo</code>.</span></li>
+    <li><b>14</b><span><code class="i">equals</code> recebe qualquer <code class="i">Object</code>, pois você pode comparar com qualquer coisa.</span></li>
+    <li><b>15</b><span>Se for exatamente o mesmo objeto na memória, é igual.</span></li>
+    <li><b>16</b><span><code class="i">instanceof</code> pergunta "isso é um Time?". Se não for, é diferente.</span></li>
+    <li><b>17</b><span>Converte (cast) o <code class="i">Object</code> para <code class="i">Time</code>, para poder ler o <code class="i">nome</code>.</span></li>
+    <li><b>18</b><span>Dois times são iguais se têm o mesmo nome. Texto se compara com <code class="i">equals</code>, nunca com <code class="i">==</code>.</span></li>
+    <li><b>21-24</b><span><code class="i">hashCode</code>: objetos iguais pelo <code class="i">equals</code> precisam ter o mesmo número. <code class="i">HashSet</code> e <code class="i">HashMap</code> usam esse número para achar objetos rápido.</span></li>
+  </ul>
+<pre class="java" data-f="Main.java">
+Time a = new Time("Flamengo");
+Time b = new Time("Flamengo");
+System.out.println(a == b);
+System.out.println(a.equals(b));
+System.out.println(a);
+</pre>
+  <ul class="ex">
+    <li><b>3</b><span><code class="i">false</code>: são dois objetos diferentes na memória, mesmo com o mesmo nome.</span></li>
+    <li><b>4</b><span><code class="i">true</code>: o conteúdo é igual.</span></li>
+    <li><b>5</b><span>Imprime <code class="i">Time: Flamengo</code>: o Java chamou o <code class="i">toString</code> sozinho.</span></li>
+  </ul>
+  <div class="card mt-3 text-sm leading-relaxed"><b>E o main?</b> <code class="i">public static void main(String[] args)</code> é a porta de entrada: o Java começa a rodar o programa por ele. <code class="i">static</code> permite rodar sem criar objeto.</div>
+  <p class="use"><b>Quando usar:</b> <code class="i">toString</code> em quase toda classe (ajuda muito a depurar). <code class="i">equals</code> e <code class="i">hashCode</code> <b>sempre juntos</b>, quando objetos serão comparados ou guardados em <code class="i">Set</code>/<code class="i">Map</code>. O IntelliJ gera os três com <code class="i">Alt+Insert</code>.</p>
+  <h3 class="mt-6 text-lg font-extrabold">Desafios</h3>
+  <div class="q" data-ok="2"><p>Qual a diferença entre <code class="i">==</code> e <code class="i">equals</code> em objetos?</p><i>Nenhuma</i><i>== compara o conteúdo, equals compara o endereço</i><i>== vê se é o mesmo objeto; equals compara o conteúdo</i><em>Por isso a e b acima dão false com == e true com equals.</em></div>
+  <div class="q" data-ok="0"><p>Para que serve o <code class="i">toString</code>?</p><i>Dar um texto legível do objeto ao imprimir</i><i>Converter texto em número</i><i>Criar o objeto</i><em>Ele é chamado automaticamente em println e em concatenações.</em></div>
+  <div class="q" data-ok="1"><p>Você sobrescreveu <code class="i">equals</code>. O que fazer junto?</p><i>Apagar o toString</i><i>Sobrescrever também o hashCode</i><i>Nada</i><em>Regra do Java: iguais pelo equals devem ter o mesmo hashCode.</em></div>
+</section>
+
+<section class="step" data-title="5. Relacionamentos">
+  <p class="tag">RELACIONAMENTO</p>
+  <h2 class="text-2xl font-extrabold">5. Relacionamento entre classes</h2>
+  <div class="card mt-3 text-sm leading-relaxed">
+    <p><b>O que é:</b> a forma como uma classe se liga a outra.</p>
+    <p class="mt-1"><b>Para que serve:</b> modelar o mundo real e decidir quem depende de quem. Do vínculo mais fraco ao mais forte:</p>
+  </div>
+  <ul class="mt-3 space-y-2 text-sm leading-relaxed">
+    <li class="card"><b>Dependência ("usa"):</b> a classe só usa a outra de passagem, como parâmetro. O Árbitro usa a Partida para apitar.</li>
+    <li class="card"><b>Associação ("conhece"):</b> guarda uma referência como atributo. O Jogador conhece seu Time.</li>
+    <li class="card"><b>Agregação ("tem", parte independente):</b> o todo tem as partes, mas elas existem sem ele. O Time tem Jogadores; se o time fechar, o jogador continua existindo.</li>
+    <li class="card"><b>Composição ("tem", parte dependente):</b> a parte nasce e morre com o todo. A Partida tem Gols; sem a partida, o gol não existe.</li>
+    <li class="card"><b>Herança ("é um"):</b> o vínculo mais forte. Goleiro é um Jogador.</li>
+  </ul>
+<pre class="java" data-f="Relacionamentos.java">
+public class Arbitro {
+    public void apitar(Partida p) {
+        p.encerrar();
+    }
+}
+
+public class Jogador {
+    private Time time;
+}
+
+public class Time {
+    private List&lt;Jogador&gt; elenco;
+    public Time(List&lt;Jogador&gt; elenco) { this.elenco = elenco; }
+}
+
+public class Partida {
+    private List&lt;Gol&gt; gols = new ArrayList&lt;&gt;();
+    public void registrarGol(String autor, int minuto) {
+        gols.add(new Gol(autor, minuto));
+    }
+}
+</pre>
+  <h4 class="ht">Linha a linha</h4>
+  <ul class="ex">
+    <li><b>2-3</b><span><b>Dependência:</b> o Árbitro não guarda a Partida. Recebe, usa e esquece.</span></li>
+    <li><b>8</b><span><b>Associação:</b> o Jogador guarda uma referência ao seu Time.</span></li>
+    <li><b>12-13</b><span><b>Agregação:</b> a lista de jogadores vem pronta de fora, pelo construtor. Eles já existiam antes do Time.</span></li>
+    <li><b>17-19</b><span><b>Composição:</b> a própria Partida cria os gols com <code class="i">new</code>. Eles só existem dentro dela.</span></li>
+  </ul>
+  <p class="use"><b>Truque para decidir:</b> quem cria a parte? Se ela chega pronta de fora, é agregação. Se o todo cria com <code class="i">new</code> lá dentro, é composição. Se o todo só usa a parte de passagem, é dependência. Prefira sempre o vínculo mais fraco que resolve o problema.</p>
+  <h3 class="mt-6 text-lg font-extrabold">Desafios</h3>
+  <div class="q" data-ok="1"><p>O Time recebe a lista de jogadores pronta pelo construtor. Qual relacionamento?</p><i>Composição</i><i>Agregação</i><i>Herança</i><em>Os jogadores existem independentemente do Time.</em></div>
+  <div class="q" data-ok="2"><p>O Gol é criado dentro da Partida e não existe sem ela. Qual relacionamento?</p><i>Dependência</i><i>Associação</i><i>Composição</i><em>A parte nasce e morre com o todo.</em></div>
+  <div class="q" data-ok="0"><p>O Árbitro só recebe a Partida como parâmetro de um método. Qual relacionamento?</p><i>Dependência</i><i>Agregação</i><i>Herança</i><em>É o vínculo mais fraco: usa e esquece.</em></div>
+</section>
+
+<section class="step" data-title="6. Objetos compostos">
+  <p class="tag">RELACIONAMENTO</p>
+  <h2 class="text-2xl font-extrabold">6. Objetos compostos</h2>
+  <div class="card mt-3 text-sm leading-relaxed">
+    <p><b>O que é:</b> um objeto que carrega, dentro dele, outros objetos como atributos. Como uma boneca russa: o Time tem um Estádio dentro.</p>
+    <p class="mt-1"><b>Para que serve:</b> quebrar um objeto grande em peças pequenas e reaproveitáveis, cada uma com suas regras.</p>
+  </div>
+<pre class="java" data-f="Estadio.java e Time.java">
+public class Estadio {
+    private String nome;
+    private int capacidade;
+
+    public Estadio(String nome, int capacidade) {
+        this.nome = nome;
+        this.capacidade = capacidade;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+
+public class Time {
+    private String nome;
+    private Estadio estadio;
+
+    public Time(String nome, Estadio estadio) {
+        this.nome = nome;
+        this.estadio = estadio;
+    }
+
+    public String descricao() {
+        return nome + " joga no " + estadio.getNome();
+    }
+}
+</pre>
+  <h4 class="ht">Linha a linha</h4>
+  <ul class="ex">
+    <li><b>1-13</b><span>Uma classe comum, com seus dados, construtor e getter.</span></li>
+    <li><b>17</b><span>O tipo do atributo é <b>outra classe</b>. Isso é o objeto composto: o Time tem um Estadio.</span></li>
+    <li><b>19-22</b><span>O Time recebe o Estadio já pronto e guarda a referência.</span></li>
+    <li><b>25</b><span>O Time pede o nome ao Estadio pelo getter. Ele não mexe nos dados do Estadio: cada objeto cuida do que é seu (encapsulamento).</span></li>
+  </ul>
+<pre class="java" data-f="Main.java">
+Estadio maracana = new Estadio("Maracanã", 78000);
+Time flu = new Time("Fluminense", maracana);
+System.out.println(flu.descricao());
+</pre>
+  <ul class="ex">
+    <li><b>1</b><span>Cria primeiro a peça (Estadio).</span></li>
+    <li><b>2</b><span>Entrega a peça para o objeto maior.</span></li>
+    <li><b>3</b><span>Imprime <code class="i">Fluminense joga no Maracanã</code>.</span></li>
+  </ul>
+  <p class="use"><b>Cuidado com o <code class="i">null</code>:</b> se o estádio não foi informado, <code class="i">estadio.getNome()</code> quebra com <code class="i">NullPointerException</code>. Proteja no construtor: <code class="i">if (estadio == null) throw new IllegalArgumentException("Estádio obrigatório");</code></p>
+  <p class="use"><b>Quando usar:</b> quando um dado tem vários campos ou comportamento próprio (endereço, estádio, técnico). Em vez de espalhar <code class="i">estadioNome</code>, <code class="i">estadioCapacidade</code> dentro do Time, crie a classe e componha. É o "tem um" do dia a dia.</p>
+  <h3 class="mt-6 text-lg font-extrabold">Desafios</h3>
+  <div class="q" data-ok="1"><p>O que é um objeto composto?</p><i>Um objeto que herda de outro</i><i>Um objeto que tem outros objetos como atributos</i><i>Um objeto com muitos métodos</i><em>Time tem Estadio: o Estadio é uma peça dentro do Time.</em></div>
+  <div class="q" data-ok="2"><p>O estádio é <code class="i">null</code> e o código chama <code class="i">estadio.getNome()</code>. O que acontece?</p><i>Retorna texto vazio</i><i>Retorna zero</i><i>Lança NullPointerException</i><em>Validar no construtor evita esse erro.</em></div>
+</section>
+
+<section class="step" data-title="7. Herança">
   <p class="tag">MÉDIO</p>
-  <h2 class="text-2xl font-extrabold">3. Herança e polimorfismo</h2>
+  <h2 class="text-2xl font-extrabold">7. Herança e polimorfismo</h2>
   <p class="mt-3 leading-relaxed"><b>Herança</b>: uma classe filha reaproveita tudo da classe pai. Goleiro <i>é um</i> Jogador, então herda nome e métodos, e ainda ganha o que é só dele.</p>
 <pre class="java" data-f="Jogador.java e Goleiro.java">
 public class Jogador {
@@ -201,9 +446,81 @@ j.apresentar();   // roda a versão do Goleiro
   <div class="q" data-ok="2"><p>O que é polimorfismo?</p><i>Esconder atributos</i><i>Criar vários construtores</i><i>A mesma chamada se comportar diferente conforme o objeto real</i><em>Ex.: <code class="i">apresentar()</code> responde diferente para Goleiro e Atacante.</em></div>
 </section>
 
-<section class="step" data-title="4. Abstração">
+<section class="step" data-title="8. Herança a fundo">
   <p class="tag">MÉDIO</p>
-  <h2 class="text-2xl font-extrabold">4. Abstração, interface e composição</h2>
+  <h2 class="text-2xl font-extrabold">8. Herança e polimorfismo a fundo</h2>
+  <div class="card mt-3 text-sm leading-relaxed">
+    <p><b>O que é:</b> o filho reaproveita o pai e pode mudar seu comportamento (<b>sobrescrita</b>). Polimorfismo é tratar vários filhos como o pai e cada um responder do seu jeito.</p>
+    <p class="mt-1"><b>Para que serve:</b> não repetir código e evitar um monte de <code class="i">if</code> por tipo.</p>
+  </div>
+<pre class="java" data-f="Jogador.java e Atacante.java">
+public class Jogador {
+    protected String nome;
+
+    public Jogador(String nome) {
+        this.nome = nome;
+    }
+
+    public double bonus() {
+        return 1000;
+    }
+}
+
+public class Atacante extends Jogador {
+    private int gols;
+
+    public Atacante(String nome, int gols) {
+        super(nome);
+        this.gols = gols;
+    }
+
+    @Override
+    public double bonus() {
+        return super.bonus() + gols * 500;
+    }
+
+    public double bonus(double extra) {
+        return bonus() + extra;
+    }
+}
+</pre>
+  <h4 class="ht">Linha a linha</h4>
+  <ul class="ex">
+    <li><b>4-6</b><span>O pai exige um nome para existir.</span></li>
+    <li><b>17</b><span><code class="i">super(nome)</code> chama o construtor do pai. Precisa ser a primeira linha do construtor do filho.</span></li>
+    <li><b>21-24</b><span><b>Sobrescrita:</b> mesmo nome e mesmos parâmetros do pai, mas com cálculo próprio.</span></li>
+    <li><b>23</b><span><code class="i">super.bonus()</code> reaproveita o cálculo do pai (1000) e soma o extra do atacante. Nada de copiar código.</span></li>
+    <li><b>26-28</b><span><b>Sobrecarga:</b> mesmo nome, parâmetros diferentes. Não substitui nada: é outra opção ao lado.</span></li>
+  </ul>
+  <div class="mt-3 grid gap-3 text-sm leading-relaxed sm:grid-cols-2">
+    <div class="card"><b>Sobrescrita (override)</b><br>Entre pai e filho. Mesma assinatura. Muda o comportamento herdado. Decidida na execução.</div>
+    <div class="card"><b>Sobrecarga (overload)</b><br>Na mesma classe. Parâmetros diferentes. Dá várias formas de chamar. Decidida na compilação.</div>
+  </div>
+<pre class="java" data-f="Main.java">
+List&lt;Jogador&gt; elenco = List.of(new Jogador("Zé"), new Atacante("Pedro", 20));
+double total = 0;
+for (Jogador j : elenco) {
+    total += j.bonus();
+}
+if (elenco.get(1) instanceof Atacante a) {
+    System.out.println(a.bonus(200));
+}
+</pre>
+  <ul class="ex">
+    <li><b>1</b><span>Lista do tipo pai com um Jogador e um Atacante juntos.</span></li>
+    <li><b>3-5</b><span>A mesma chamada <code class="i">j.bonus()</code> calcula 1000 para o Zé e 11000 para o Pedro. Cada objeto usa a sua versão: <b>polimorfismo</b>, sem nenhum <code class="i">if</code> por tipo.</span></li>
+    <li><b>6</b><span><code class="i">instanceof</code> pergunta "é um Atacante?" e já cria a variável <code class="i">a</code> (Java 16+), para acessar o que é exclusivo do filho.</span></li>
+  </ul>
+  <p class="use"><b>Quando usar:</b> sobrescrita quando o filho faz a mesma coisa de um jeito diferente. Sobrecarga quando a mesma ideia aceita entradas diferentes. <code class="i">instanceof</code> só em último caso: se precisar dele toda hora, o polimorfismo não está sendo bem aproveitado. Evite hierarquias com mais de 3 níveis.</p>
+  <h3 class="mt-6 text-lg font-extrabold">Desafios</h3>
+  <div class="q" data-ok="1"><p>Qual chamada reaproveita o método do pai dentro do filho?</p><i>this.bonus()</i><i>super.bonus()</i><i>pai.bonus()</i><em><code class="i">super</code> acessa a versão do pai.</em></div>
+  <div class="q" data-ok="2"><p>Mesmo nome de método, parâmetros diferentes, na mesma classe. Como se chama?</p><i>Sobrescrita</i><i>Herança</i><i>Sobrecarga</i><em>Overload = várias versões lado a lado.</em></div>
+  <div class="q" data-ok="0"><p>No <code class="i">for</code>, quem decide qual <code class="i">bonus()</code> roda?</p><i>O tipo real do objeto, na hora da execução</i><i>O tipo da variável j</i><i>A ordem da lista</i><em>É a base do polimorfismo.</em></div>
+</section>
+
+<section class="step" data-title="9. Abstração">
+  <p class="tag">MÉDIO</p>
+  <h2 class="text-2xl font-extrabold">9. Abstração, interface e composição</h2>
   <p class="mt-3 leading-relaxed"><b>Abstrair</b> é definir só o essencial e deixar os detalhes para quem implementa. Três ferramentas: classe abstrata, interface e composição.</p>
 <pre class="java" data-f="Jogador.java, CobradorDePenalti.java, Time.java">
 public abstract class Jogador {
@@ -239,9 +556,9 @@ public class Time {
   <div class="q" data-ok="1"><p>"Time tem uma lista de Jogadores" é um exemplo de:</p><i>Herança</i><i>Composição</i><i>Polimorfismo</i><em>Relação "tem um" = composição.</em></div>
 </section>
 
-<section class="step" data-title="5. Brasileirão">
+<section class="step" data-title="10. Brasileirão">
   <p class="tag">GRANDE</p>
-  <h2 class="text-2xl font-extrabold">5. Projeto: Mini Brasileirão</h2>
+  <h2 class="text-2xl font-extrabold">10. Projeto: Mini Brasileirão</h2>
   <p class="mt-3 leading-relaxed">Juntando tudo: o Time guarda sua campanha e o Campeonato coordena as partidas e monta a tabela.</p>
 <pre class="java" data-f="Time.java">
 public void registrarResultado(int pro, int contra) {
@@ -285,9 +602,9 @@ public List&lt;Time&gt; tabela() {
   <div class="q" data-ok="2"><p>Quantos pontos vale um empate?</p><i>0</i><i>3</i><i>1</i><em>Vitória 3, empate 1, derrota 0.</em></div>
 </section>
 
-<section class="step" data-title="6. Mercado">
+<section class="step" data-title="11. Mercado">
   <p class="tag">MERCADO</p>
-  <h2 class="text-2xl font-extrabold">6. O que as empresas esperam</h2>
+  <h2 class="text-2xl font-extrabold">11. O que as empresas esperam</h2>
   <ul class="mt-3 space-y-3 text-sm leading-relaxed">
     <li class="card"><b>Nomes claros:</b> <code class="i">registrarResultado</code> explica sozinho.</li>
     <li class="card"><b>Uma responsabilidade por classe</b> (o "S" do SOLID): Time cuida da campanha, Campeonato cuida da competição.</li>
@@ -313,7 +630,7 @@ public List&lt;Time&gt; tabela() {
 
 <script>
 // destaque de sintaxe (tema tipo editor)
-const KW='public|private|protected|class|abstract|extends|implements|interface|new|return|void|int|double|boolean|static|final|if|else|this|throw|null';
+const KW='public|private|protected|class|abstract|extends|implements|interface|new|return|void|int|double|boolean|static|final|if|else|this|throw|null|super|instanceof|true|false|for';
 const re=new RegExp('(//.*)|("[^"]*")|(@\\w+)|\\b('+KW+')\\b|\\b([A-Z]\\w*)\\b|\\b(\\d+)\\b|(\\w+)(?=\\()','g');
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 document.querySelectorAll('pre.java').forEach(p=>{
